@@ -24,8 +24,11 @@ function Header() {
       <Link to={'/about'}>
         <li className='hidden sm:inline text-slate-700 hover:underline'>About</li>
       </Link>
-      <Link to={'/sing-in'}>
-        <li className='sm:inline text-slate-700 hover:underline'>Sing in</li>
+      <Link to={'/sign-in'}>
+        <li className='sm:inline text-slate-700 hover:underline'>Sign in</li>
+      </Link>
+      <Link to={'/sign-up'}>
+        <li className='sm:inline text-slate-700 hover:underline'>Sign up</li>
       </Link>
 
       </ul>
