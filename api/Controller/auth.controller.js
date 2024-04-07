@@ -47,3 +47,39 @@ export const signin=async(req,res,next)=>{
         next(errorHandler(500,'internal server error'));
     }
 }
+
+
+export const google=async(req,res,next)=>{
+    //check if user exist
+    //if exist ,sign in
+    //else create new user
+    try {
+        const user=await User.findOne({email:req.body.email})
+        if(user){
+            const token=jwt.sign({userId:existedUser._id},process.env.SECRET_KEY);
+            const {password,...rest}=user._doc;
+
+            res.status(200).cookie('access_toke',token,{httpOnly:true}).json({
+                msg:"user created",
+                data:rest
+            })
+            
+        }else{
+            const generatePassword=Math.random().toString(36).slice(-8)+Math.random().toString(36).slice(-8);
+            const hashedPassword=bcryptjs.hashSync(generatePassword,10);
+            const generateUsername=req.body.username+Math.random().toString(36).slice(-8)
+            const newUser=await User.create({username:generateUsername,email:req.body.email,password:hashedPassword,photo:req.body.photo})
+
+            const token=jwt.sign({userId:newUser._id},process.env.SECRET_KEY);
+            const {password,...rest}=newUser._doc;
+            
+            res.status(200).cookie('access_toke',token,{httpOnly:true}).json({
+                msg:"user created",
+                data:rest
+            })
+
+        }
+    } catch (error) {
+        next(errorHandler(501,error.message))
+    }
+}
