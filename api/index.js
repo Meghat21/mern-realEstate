@@ -3,9 +3,12 @@ const app=express();
 import dotenv from 'dotenv'
 import mongoose from "mongoose";
 import authRouter from './Routes/auth.route.js'
+import userRouter from './Routes/user.route.js'
+import cookieParser from 'cookie-parser'
 
 
 app.use(express.json())
+app.use(cookieParser())
 dotenv.config()
 
 //connect to db
@@ -18,6 +21,8 @@ mongoose.connect(process.env.MONGO_DB_URL)
 })
 
 app.use('/app/v1/auth',authRouter)
+app.use('/app/v1/user',userRouter)
+
 
 //middleware
 app.use((err,req,res,next)=>{
