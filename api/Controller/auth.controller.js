@@ -14,10 +14,7 @@ export const signup=async(req,res,next)=>{
     try {
         const newUser=await User.create({username,password:hashPassword,email});
     
-        res.status(200).json({
-            msg:'user created',
-            data:newUser
-        })
+        res.status(200).json(newUser)
     } catch (error) {
         next(errorHandler(550,'Internal server error'))
     }
@@ -37,10 +34,7 @@ export const signin=async(req,res,next)=>{
         const token=jwt.sign({userId:existedUser._id},process.env.SECRET_KEY);
         const {password:pass,...rest}=existedUser._doc;
 
-        res.status(200).cookie('access_toke',token,{httpOnly:true}).json({
-            msg:"user created",
-            data:rest
-        })
+        res.status(200).cookie('access_toke',token,{httpOnly:true}).json(rest)
 
 
     } catch (error) {
@@ -56,13 +50,10 @@ export const google=async(req,res,next)=>{
     try {
         const user=await User.findOne({email:req.body.email})
         if(user){
-            const token=jwt.sign({userId:existedUser._id},process.env.SECRET_KEY);
+            const token=jwt.sign({userId:user._id},process.env.SECRET_KEY);
             const {password,...rest}=user._doc;
 
-            res.status(200).cookie('access_toke',token,{httpOnly:true}).json({
-                msg:"user created",
-                data:rest
-            })
+            res.status(200).cookie('access_toke',token,{httpOnly:true}).json(rest)
             
         }else{
             const generatePassword=Math.random().toString(36).slice(-8)+Math.random().toString(36).slice(-8);
@@ -73,10 +64,7 @@ export const google=async(req,res,next)=>{
             const token=jwt.sign({userId:newUser._id},process.env.SECRET_KEY);
             const {password,...rest}=newUser._doc;
             
-            res.status(200).cookie('access_toke',token,{httpOnly:true}).json({
-                msg:"user created",
-                data:rest
-            })
+            res.status(200).cookie('access_toke',token,{httpOnly:true}).json(rest)
 
         }
     } catch (error) {

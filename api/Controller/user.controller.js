@@ -3,6 +3,7 @@ import {errorHandler} from '../Utils/errorHandler.js'
 import bcryptjs from 'bcryptjs';
 
 export const update=async(req,res,next)=>{
+    console.log(req.user);
     if(req.user.userId !== req.params.userId){
         return next(errorHandler(401,'you can only update your account'))
     }
