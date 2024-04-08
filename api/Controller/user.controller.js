@@ -32,3 +32,18 @@ export const update=async(req,res,next)=>{
 
 
 }
+
+
+export const deleteUser=async(req,res,next)=>{
+    if(req.user.userId !== req.params.userId){
+        return next(errorHandler(401,'you can only update your account'))
+    }
+
+    try {
+        const deleteUser=await User.findByIdAndDelete(req.params.userId);
+        res.clearCookie('access_toke');
+        res.status(200).json({msg:'User deleted'})
+    } catch (error) {
+        next(errorHandler(500,'Server error sorry'))
+    }
+}

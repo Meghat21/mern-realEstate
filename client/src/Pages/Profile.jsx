@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux'
 import { useDispatch } from 'react-redux';
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage'
 import {app} from '../firebase'
-import {updateInFailure,updateInStart,updateInSuccess} from '../redux/userSlice'
+import {updateInFailure,updateInStart,updateInSuccess,deleteUserFailure,deleteUserStart,deleteUserSuccess} from '../redux/userSlice'
 import {useNavigate} from 'react-router-dom'
 
 function Profile() {
@@ -81,6 +81,23 @@ function Profile() {
     }
   };
   
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/app/v1/user/delete/${currentUser._id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+      navigate('/sign-up');
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
 
   return (
 
@@ -110,7 +127,7 @@ function Profile() {
       </form>
 
       <div className='flex justify-between mt-5'>
-        <span className='text-red-700 cursor-pointer'>Delete account</span>
+        <span onClick={handleDeleteUser} className='text-red-700 cursor-pointer'>Delete account</span>
         <span className='text-red-700 cursor-pointer'>Sign out</span>
 
       </div>
