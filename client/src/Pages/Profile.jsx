@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage'
 import {app} from '../firebase'
 import {updateInFailure,updateInStart,updateInSuccess,deleteUserFailure,deleteUserStart,deleteUserSuccess,signOutUserFailure,signOutUserStart,signOutUserSuccess} from '../redux/userSlice'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate,Link} from 'react-router-dom'
 
 function Profile() {
   const fileRef=useRef(null);
@@ -138,6 +138,9 @@ function Profile() {
         <input onChange={handleChange} type="password" name="" id="password" placeholder='password' className='border p-3 rounded-lg'/>
 
         <button disabled={loading} type='submit' className='bg-slate-700 text-white uppercase rounded-lg p-3 hover:opacity-80 disabled:opacity-70'>{loading ? 'Loading ... ': 'Update'}</button>
+        <Link to={"/create-listing"} className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-80'>
+          Create Listing
+        </Link>
       </form>
 
       <div className='flex justify-between mt-5'>
