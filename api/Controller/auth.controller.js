@@ -71,3 +71,13 @@ export const google=async(req,res,next)=>{
         next(errorHandler(501,error.message))
     }
 }
+
+
+export const signout=async(res,req,next)=>{
+    try {
+        res.clearCookie('access_toke');
+        res.status(200).json({msg:'user has been logout'});
+    } catch (error) {
+        next(errorHandler(501,'server error'))
+    }
+}
