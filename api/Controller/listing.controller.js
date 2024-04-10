@@ -65,3 +65,18 @@ export const getUserListing=async(req,res,next)=>{
         res.status(200).json(listing);
     }
 }
+
+
+//app/v1/listing/list/:id
+export const getListing=async(req,res,next)=>{
+    try {
+        const listing=await Listing.findById(req.params.id);
+        if(!listing) {
+            return next(errorHandler(404,'not found listing'));
+        }
+
+        res.status(200).json(listing);
+    } catch (error) {
+       next(error) 
+    }
+}
