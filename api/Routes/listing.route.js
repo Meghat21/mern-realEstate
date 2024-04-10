@@ -5,7 +5,7 @@ import {verifyUser} from '../Middleware/verifyToken.js'
 
 
 router.post('/create',verifyUser,createListing)
-router.post('/update',verifyUser,updateListing)
+router.put('/update/:id',verifyUser,updateListing)
 router.delete('/delete/:id',verifyUser,deleteListing)
 router.get('/listing/:id',verifyUser,getUserListing)
 

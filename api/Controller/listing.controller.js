@@ -12,7 +12,30 @@ export const createListing=async(req,res,next)=>{
 }
 
 //app/v1/list/update/:id
-export const updateListing=async(req,res)=>{}
+export const updateListing=async(req,res,next)=>{
+    const listingone=await Listing.findById(req.params.id);
+
+    if(!listingone) {
+        return next(errorHandler(404,'not found listing'))
+    }
+
+    if(req.user.userId !== listingone.userRef){
+        return next(errorHandler(401,'update your own listing'))
+    }
+
+    try {
+        const updateListing=await Listing.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {new:true}
+        );
+        res.status(200).json(updateListing);
+    } catch (error) {
+        next(error)
+    }
+
+
+}
 
 //app/v1/list/delete/:iduser
 export const deleteListing=async(req,res,next)=>{
@@ -22,7 +45,7 @@ export const deleteListing=async(req,res,next)=>{
         return next(errorHandler(404,'not found listing'))
     }
     if(req.user.userId !== listingone.userRef){
-        return next(errorHandler(401,'update your own listing'))
+        return next(errorHandler(401,'delete your own listing'))
     }
 
     try {
